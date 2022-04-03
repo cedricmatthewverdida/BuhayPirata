@@ -1,19 +1,30 @@
 <script>
+  import control_pause from "../../assets/control_pause.png";
+  import control_play from "../../assets/control_play.png";
+  import control_stop from "../../assets/control_stop.png";
+  import loading from '../../assets/loading.gif';
+
   import SearchItems from "./SearchItems.svelte";
   import youtubeAPI from "../../api/youtube";
+
   import { searchResults } from "../../store/store";
   console.log("inside the search results", $searchResults);
 
   let videoName = "";
+  let isLoadingResource = false;
   let currentMediaTime = null;
   let currentMediaDuration = null;
+  let currentMediaPlaying = false;
+
   let audioData = {
     url: "",
     title: "",
     thumbnail: "https://via.placeholder.com/150",
   };
   const search = async (e, name) => {
+    isLoadingResource = true;
     await youtubeAPI.search(name).then((res) => {
+      isLoadingResource = false;
       searchResults.set(res);
     });
   };
@@ -36,6 +47,7 @@
       // @ts-ignore
       audio.addEventListener("loadedmetadata", function () {
         currentMediaDuration = convertTime(this.duration);
+        currentMediaPlaying = true;
       });
     });
   };
@@ -57,6 +69,20 @@
     // @ts-ignore
     audio.currentTime = e.target.value;
   };
+
+  // Pause or Play audio
+  const pauseAudio = () => {
+    const audio = document.getElementById("media");
+    // @ts-ignore
+    currentMediaPlaying = !currentMediaPlaying;
+    if (currentMediaPlaying) {
+      // @ts-ignore
+      audio.play();
+    } else {
+      // @ts-ignore
+      audio.pause();
+    }
+  };
 </script>
 
 <article role="tabpanel" id="music" class="container">
@@ -73,23 +99,36 @@
           search(e, videoName);
         }}>Search Music</button
       >
+      <img src={loading} alt="loading" style={!isLoadingResource && 'display: none;'} width="32px" height="32px"/>
     </div>
 
     <ul class="tree-view">
-      {#each $searchResults as item}
-        <!-- svelte-ignore a11y-invalid-attribute -->
+      {#if $searchResults.length == 0}
         <li>
-          <a
-            href="#"
-            on:click={(e) => {
-              e.preventDefault();
-              grabVideo(e, item.id);
-            }}
-            style="cursor: pointer;"
-            ><svelte:component this={SearchItems} objAttr={item} /></a
-          >
+          <div class="tree-view-item">
+            <div class="tree-view-item-content">
+              <div class="tree-view-item-content-text">
+                <span>No results found</span>
+              </div>
+            </div>
+          </div>
         </li>
-      {/each}
+      {:else}
+        {#each $searchResults as item}
+          <!-- svelte-ignore a11y-invalid-attribute -->
+          <li>
+            <a
+              href="#"
+              on:click={(e) => {
+                e.preventDefault();
+                grabVideo(e, item.id);
+              }}
+              style="cursor: pointer;"
+              ><svelte:component this={SearchItems} objAttr={item} /></a
+            >
+          </li>
+        {/each}
+      {/if}
     </ul>
 
     <legend>Search Music</legend>
@@ -110,14 +149,30 @@
           value={currentMediaTime || "0"}
           on:change={seekAudio}
         />
-        <label for="range27">{currentMediaDuration == null ? "00:00" : currentMediaDuration}</label>
+        <label for="range27"
+          >{currentMediaDuration == null
+            ? "00:00"
+            : currentMediaDuration}</label
+        >
       </div>
       <div class="field-row" style="width: 150px; margin-top: 1em;">
-        <button id="playBTN">Play</button>
-        <button>Stop</button>
+        <button id="playBTN" on:click={pauseAudio}
+          ><img
+            id="play"
+            src={currentMediaPlaying ? control_pause : control_play}
+            alt="Play"
+          /></button
+        >
+        <button><img src={control_stop} alt="Stop" /></button>
       </div>
       <div class="field-row" style="width: 300px">
-        <audio controls id="media" on:timeupdate={getCurrentTime} autoplay hidden>
+        <audio
+          controls
+          id="media"
+          on:timeupdate={getCurrentTime}
+          autoplay
+          hidden
+        >
           <source src={audioData.url} id="audioSrc" type="audio/webm" />
         </audio>
       </div>
