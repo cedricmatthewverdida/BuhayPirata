@@ -16,6 +16,7 @@
   "dependencies": {
     "@easyroute/svelte": "^3.2.2",
     "axios": "^0.26.1",
+    "js-cookie": "^3.0.1",
     "marx-css": "^4.0.1",
     "xp.css": "^0.3.0"
   }

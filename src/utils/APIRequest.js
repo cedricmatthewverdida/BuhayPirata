@@ -1,5 +1,6 @@
 // import "regenerator-runtime/runtime";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 let cors_api_url = 'http://localhost:3333/';
 
@@ -12,6 +13,7 @@ async function APIRequest(options, timeout = 0) {
           headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
           },
         })
         .then((response) => {
@@ -23,6 +25,7 @@ async function APIRequest(options, timeout = 0) {
         .post(`${cors_api_url}${options.url}`, options.data, {
           headers: {
             "Content-Disposition": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
           },
         })
         .then((response) => {
@@ -34,6 +37,7 @@ async function APIRequest(options, timeout = 0) {
         .put(`${cors_api_url}${options.url}`, options.data, {
           headers: {
             "Content-Disposition": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
           },
         })
         .then((response) => {
@@ -45,6 +49,7 @@ async function APIRequest(options, timeout = 0) {
         .delete(`${cors_api_url}${options.url}`, {
           headers: {
             "Content-Disposition": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("token")}`,
           },
         })
         .then((response) => {

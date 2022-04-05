@@ -1,37 +1,42 @@
 <script>
-// @ts-nocheck
+  // @ts-nocheck
 
   import frontimage from "../assets/frontimage.jpg";
   import userAPI from "..//api/user";
+  import router from "../router";
 
   const formData = {
     username: "",
-    password: ""
+    password: "",
   };
 
   const login = async () => {
     console.log("login", formData);
-    await userAPI.login(formData).then(res => {
-      console.log("login res", res);
-      if (res.status === 200) {
-        window.location.href = "/";
-      }
-    }).catch(err => {
-      alert("Invalid username or password");
-    });
-  }
+    await userAPI
+      .login(formData)
+      .then((res) => {
+        if (res.status === 200) {
+          router.push("/home");
+        }
+      })
+      .catch((err) => {
+        alert("Invalid username or password");
+      });
+  };
 
   const register = async () => {
     console.log("register", formData);
-    await userAPI.register(formData).then(res => {
-      console.log("register res", res);
-      if (res.status === 200) {
-        window.location.href = "/";
-      }
-    }).catch(err => {
-      alert("Something went wrong!");
-    });
-  }
+    await userAPI
+      .register(formData)
+      .then((res) => {
+        if (res.status === 200) {
+          router.push("/home");
+        }
+      })
+      .catch((err) => {
+        alert("Something went wrong!");
+      });
+  };
 </script>
 
 <div class="window-body">
@@ -53,7 +58,7 @@
       id="username"
       type="text"
       value={formData.username}
-      on:input={e => {
+      on:input={(e) => {
         formData.username = e.target.value;
       }}
       style="margin-left: 1em; width: 250px;"
@@ -66,22 +71,15 @@
       id="password"
       type="password"
       value={formData.password}
-      on:input={e => (formData.password = e.target.value)}
+      on:input={(e) => (formData.password = e.target.value)}
       style="margin-left: 1em; width: 250px;"
     />
   </div>
   <div class="field-row center">
-    <button
-      class="center"
-      on:click={login}
-      style="width: 150px;">Login</button
+    <button class="center" on:click={login} style="width: 150px;">Login</button>
+    <button class="center" on:click={register} style="width: 150px;"
+      >Signup</button
     >
-    <button
-      class="center"
-      on:click={register}
-      style="width: 150px;">Signup</button
-    >
-
   </div>
 </div>
 

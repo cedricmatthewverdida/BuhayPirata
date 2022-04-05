@@ -12,6 +12,7 @@ const router = new Router({
       path: "/",
       component: Login,
       name: "Login",
+      beforeEnter: preventHistory,
     },
     {
       path: "/home",
@@ -32,9 +33,18 @@ async function checkAuth(to, from, next){
   if(user){
     next();
   }else{
-    next("/");
+    router.push("/");
   }
 }
 
+async function preventHistory(to, from, next){
+  const user = await userAPI.check().then((r) => r.user).catch(() => null);
+  if(user){
+    router.push('/home')
+  }else{
+    // if logged in
+    next();
+  }
+}
 
 export default router;

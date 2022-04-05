@@ -1,5 +1,6 @@
 // the youtube API
 import axios from "axios";
+import Cookies from "js-cookie";
 import APIRequest  from "../utils/APIRequest";
 
 
@@ -10,7 +11,7 @@ const userAPI = {
             data,
             method: "POST",
         }).then((r) => {
-            axios.defaults.headers.common["Authorization"] = `Bearer ${r.data.token.token}`;
+            Cookies.set("token", r.data.token.token);
             return r.data;
         });
     },
@@ -26,6 +27,14 @@ const userAPI = {
     check: async () => {
         return await APIRequest({
             url: "api/auth/check",
+            method: "GET",
+        }).then((r) => {
+            return r.data;
+        });
+    },
+    logout: async () => {
+        return await APIRequest({
+            url: "api/auth/logout",
             method: "GET",
         }).then((r) => {
             return r.data;
