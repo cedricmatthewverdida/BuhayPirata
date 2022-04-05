@@ -1,16 +1,47 @@
 <script>
-  import frontimage from '../assets/frontimage.jpg' ;
-  import router from '../router';
-  import { currentRoute } from '../store/store';
-  import useCurrentRoute from '@easyroute/svelte/useCurrentRoute';
-  import {onMount} from 'svelte';
-  const useRoute = useCurrentRoute().getValue;
+// @ts-nocheck
+
+  import frontimage from "../assets/frontimage.jpg";
+  import userAPI from "..//api/user";
+
+  const formData = {
+    username: "",
+    password: ""
+  };
+
+  const login = async () => {
+    console.log("login", formData);
+    await userAPI.login(formData).then(res => {
+      console.log("login res", res);
+      if (res.status === 200) {
+        window.location.href = "/";
+      }
+    }).catch(err => {
+      alert("Invalid username or password");
+    });
+  }
+
+  const register = async () => {
+    console.log("register", formData);
+    await userAPI.register(formData).then(res => {
+      console.log("register res", res);
+      if (res.status === 200) {
+        window.location.href = "/";
+      }
+    }).catch(err => {
+      alert("Something went wrong!");
+    });
+  }
 </script>
 
 <div class="window-body">
-    
   <div class="field-row center">
-    <img src={frontimage} style="width: 128px;" alt="frontimage" class="center">
+    <img
+      src={frontimage}
+      style="width: 128px;"
+      alt="frontimage"
+      class="center"
+    />
   </div>
 
   <div class="field-row center">
@@ -21,6 +52,10 @@
     <input
       id="username"
       type="text"
+      value={formData.username}
+      on:input={e => {
+        formData.username = e.target.value;
+      }}
       style="margin-left: 1em; width: 250px;"
       placeholder="username"
     />
@@ -30,11 +65,23 @@
     <input
       id="password"
       type="password"
+      value={formData.password}
+      on:input={e => (formData.password = e.target.value)}
       style="margin-left: 1em; width: 250px;"
     />
   </div>
   <div class="field-row center">
-    <button class="center" on:click={() => router.push('/home')} style="width: 150px;">Login</button>
+    <button
+      class="center"
+      on:click={login}
+      style="width: 150px;">Login</button
+    >
+    <button
+      class="center"
+      on:click={register}
+      style="width: 150px;">Signup</button
+    >
+
   </div>
 </div>
 
