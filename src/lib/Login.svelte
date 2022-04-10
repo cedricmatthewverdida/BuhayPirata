@@ -1,7 +1,6 @@
 <script>
   // @ts-nocheck
-
-  import frontimage from "../assets/frontimage.jpg";
+  
   import userAPI from "..//api/user";
   import router from "../router";
 
@@ -39,54 +38,65 @@
   };
 </script>
 
-<div class="window-body">
-  <div class="field-row center">
-    <img
-      src={frontimage}
-      style="width: 128px;"
-      alt="frontimage"
-      class="center"
-    />
-  </div>
+<div class="flex h-screen">
+  <div class="m-auto">
+  <div class="card lg:card-side bg-base-100 shadow-xl glass">
+    <figure>
+      <img src="https://i.pinimg.com/originals/c5/d7/e3/c5d7e3bf2656c42b1a45db0c8607dedb.jpg" style="height: 500px; width: 500px" alt="Buhay Pirata">
+    </figure>
+    <div class="card-body w-96">
+      <h2 class="card-title buhayPirata flex items-center justify-center">Buhay Pirata</h2>
+      
+      
+      <div class="mt-5">
+        <div class="form-control w-full max-w-xs">
+          <!-- svelte-ignore a11y-label-has-associated-control -->
+          <label class="label">
+            <span class="label-text">Username</span>
+          </label>
+          <input
+            id="username"
+            value={formData.username}
+            on:input={(e) => {
+              formData.username = e.target.value;
+            }}
+            type="text"
+            placeholder="Type here"
+            class="input input-bordered w-full max-w-xs"
+          >
+        </div>
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <div class="form-control w-full max-w-xs">
+          <label class="label">
+            <span class="label-text">Password</span>
+          </label>
+          <input
+            id="password"
+            type="password"
+            value={formData.password}
+            on:input={(e) => (formData.password = e.target.value)}
+            placeholder="Type here"
+            class="input input-bordered w-full max-w-xs "
+          >
+        </div>
+  
+        <button on:click={login} class="btn btn-primary btn-block mt-5">Login</button>
 
-  <div class="field-row center">
-    <span>please enter your login details</span>
+        <div class="mt-2">
+          <small on:click={register}>Create Account</small>
+        </div>
+  
+      </div>
+
+    </div>
   </div>
-  <div class="field-row center">
-    <label for="username">Username: </label>
-    <input
-      id="username"
-      type="text"
-      value={formData.username}
-      on:input={(e) => {
-        formData.username = e.target.value;
-      }}
-      style="margin-left: 1em; width: 250px;"
-      placeholder="username"
-    />
-  </div>
-  <div class="field-row center">
-    <label for="password">Password: </label>
-    <input
-      id="password"
-      type="password"
-      value={formData.password}
-      on:input={(e) => (formData.password = e.target.value)}
-      style="margin-left: 1em; width: 250px;"
-    />
-  </div>
-  <div class="field-row center">
-    <button class="center" on:click={login} style="width: 150px;">Login</button>
-    <button class="center" on:click={register} style="width: 150px;"
-      >Signup</button
-    >
-  </div>
+</div>
 </div>
 
 <style>
-  .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @import url('https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Creepster&family=Press+Start+2P&display=swap');
+  .buhayPirata{
+    /* font-family: 'Bungee Inline', cursive; */
+    font: 3.5em 'Creepster';
   }
 </style>

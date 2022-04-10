@@ -2,6 +2,7 @@ import Router from "@easyroute/core";
 import hashMode from "@easyroute/core/hash-mode";
 import Home from "./lib/Home.svelte";
 import Login from "./lib/Login.svelte";
+import Test from './lib/Test.svelte';
 import { currentRoute } from "./store/store";
 import userAPI from "./api/user";
 
@@ -18,6 +19,12 @@ const router = new Router({
       path: "/home",
       component: Home,
       name: "Home",
+      beforeEnter: checkAuth,
+    },
+    {
+      path: "/test",
+      component: Test,
+      name: "Test",
       beforeEnter: checkAuth,
     },
   ],
